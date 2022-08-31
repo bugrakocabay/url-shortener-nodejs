@@ -56,12 +56,12 @@ app.post("/", async (req, res) => {
 app.get("/:code", async (req, res) => {
   try {
     const queryStr = "SELECT longurl FROM urls WHERE urlcode = $1";
-    console.log(req.params.code);
     const query = await db.query(queryStr, [req.params.code]);
 
-    console.log(query);
+    let result = Object.values(query.rows[0]); // getting the value from query result
+
     if (query.rowCount > 0) {
-      return res.redirect(query.rows[0]);
+      return res.redirect(result);
     } else {
       return res.status(404).json({ msg: "URL not found" });
     }
